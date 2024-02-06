@@ -83,7 +83,7 @@ if st.button("Obter Taxa"):
 
     except Exception:
     
-    pass
+        pass
     finally:
         # Certifique-se de fechar o navegador ao finalizar
         driver.quit()
