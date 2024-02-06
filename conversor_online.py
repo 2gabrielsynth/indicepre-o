@@ -78,7 +78,12 @@ if st.button("Obter Taxa"):
 
         # Imprimir o texto do elemento
         texto_do_elemento = elemento.text
+     
         st.success(f"Resultado: {texto_do_elemento}")
+
+    except Exception:
+    
+    pass
     finally:
         # Certifique-se de fechar o navegador ao finalizar
         driver.quit()
