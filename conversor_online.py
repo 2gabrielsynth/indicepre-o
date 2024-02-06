@@ -4,7 +4,6 @@ from PIL import Image
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
-from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 st.markdown("<h1 style='text-align: center; color: #00497e;'>Índice de Preços - Banco Central:</h1>", unsafe_allow_html=True)
@@ -42,14 +41,13 @@ if st.button("Obter Taxa"):
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('--no-sandbox')
-    
-    chrome_driver_path = "chromedriver.exe"  
-    driver = webdriver.Chrome(executable_path=chrome_driver_path, options=chrome_options)
 
-   
+    # Caminho do executável do ChromeDriver
+    chrome_driver_path = "./bin/chromedriver.exe"  # ou o caminho correto se a estrutura de diretórios for diferente
 
     # Script Selenium
-    with webdriver.Chrome(options=chrome_options) as driver:
+    driver = webdriver.Chrome(options=chrome_options)
+    with driver:
         url = 'https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores'
 
         driver.get(url)
@@ -77,9 +75,6 @@ if st.button("Obter Taxa"):
         texto_do_elemento = elemento.text
         st.success(f"Resultado: {texto_do_elemento}")
 
-    # Fecha o navegador
-    driver.quit()
-
 # Parte do Pandas para processar o CSV
 uploaded_file = st.file_uploader("Carregue o arquivo CSV", type=["csv"])
 nome_coluna = st.text_input("Digite o nome da coluna:")
@@ -101,8 +96,9 @@ if st.button("Processar CSV"):
                 df[nome_coluna] = df[nome_coluna].apply(lambda x: f'R${x:,.2f}')
                 df.to_csv(novo_arquivo_csv, index=False, decimal=',', sep=";")
                 st.success(f"Arquivo {novo_arquivo_csv}.csv gerado com sucesso!")
-                
-                down1 = st.button
+
+                # Botão para baixar arquivo
+                down1 = st.button("Baixar arquivo")
                 if down1:
                     file_path = novo_arquivo_csv
                     with open(file_path, "rb") as file:
