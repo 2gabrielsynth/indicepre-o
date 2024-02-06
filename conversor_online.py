@@ -42,7 +42,11 @@ if st.button("Obter Taxa"):
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('--no-sandbox')
-    driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=chrome_options)
+    
+    chrome_driver_path = "chromedriver.exe"  
+    driver = webdriver.Chrome(executable_path=chrome_driver_path, options=chrome_options)
+
+   
 
     # Script Selenium
     with webdriver.Chrome(options=chrome_options) as driver:
