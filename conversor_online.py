@@ -4,6 +4,7 @@ from PIL import Image
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
+from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 st.markdown("<h1 style='text-align: center; color: #00497e;'>Índice de Preços - Banco Central:</h1>", unsafe_allow_html=True)
@@ -41,6 +42,7 @@ if st.button("Obter Taxa"):
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('--no-sandbox')
+    driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=chrome_options)
 
     # Script Selenium
     with webdriver.Chrome(options=chrome_options) as driver:
