@@ -4,7 +4,9 @@ from PIL import Image
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
-from webdriver_manager.firefox import GeckoDriverManager
+from webdriver_manager.chrome import ChromeDriverManager
+
+from selenium.webdriver.chrome.service import Service
 import time
 
 st.markdown("<h1 style='text-align: center; color: #00497e;'>Índice de Preços - Banco Central:</h1>", unsafe_allow_html=True)
@@ -37,26 +39,24 @@ final = st.text_input("Digite o Mês e Ano finais (MMAAA): ")
 
 # Botão para acionar o script Selenium
 if st.button("Obter Taxa"):
-    # Configuração do Firefox para modo headless
-    firefox_options = webdriver.FirefoxOptions()
-    firefox_options.add_argument('--headless')
-    firefox_options.add_argument('--disable-gpu')
+    # Configuração do Chrome para modo headless
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--disable-gpu')
     
-    # Especificação manual da versão do GeckoDriver
-    geckodriver_version = "v0.30.0"  # Substitua pela versão desejada
-    
-    # Configuração do GeckoDriver usando o GeckoDriverManager com versão específica
-    geckodriver_path = GeckoDriverManager(version=geckodriver_version).install()
+    # Configuração do WebDriver usando o ChromeDriverManager
+    chrome_driver_path = ChromeDriverManager().install()
     
     # Script Selenium
-    with webdriver.Firefox(options=firefox_options) as driver:
+    chrome_service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
+    
+
+    try:
         url = 'https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores'
 
         driver.get(url)
         time.sleep(2)
-
-        # Restante do seu script
-        # ...
 
         # Preenche o campo 'selIndice'
         select_element = driver.find_element("xpath", '//select[@name="selIndice"]')
@@ -79,6 +79,10 @@ if st.button("Obter Taxa"):
         # Imprimir o texto do elemento
         texto_do_elemento = elemento.text
         st.success(f"Resultado: {texto_do_elemento}")
+    finally:
+        # Certifique-se de fechar o navegador ao finalizar
+        driver.quit()
+        
 
 # Parte do Pandas para processar o CSV
 uploaded_file = st.file_uploader("Carregue o arquivo CSV", type=["csv"])
