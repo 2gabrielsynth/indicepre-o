@@ -42,8 +42,11 @@ if st.button("Obter Taxa"):
     firefox_options.add_argument('--headless')
     firefox_options.add_argument('--disable-gpu')
     
-    # Configuração do GeckoDriver usando o GeckoDriverManager
-    geckodriver_path = GeckoDriverManager().install()
+    # Especificação manual da versão do GeckoDriver
+    geckodriver_version = "v0.30.0"  # Substitua pela versão desejada
+    
+    # Configuração do GeckoDriver usando o GeckoDriverManager com versão específica
+    geckodriver_path = GeckoDriverManager(version=geckodriver_version).install()
     
     # Script Selenium
     with webdriver.Firefox(options=firefox_options) as driver:
@@ -51,6 +54,10 @@ if st.button("Obter Taxa"):
 
         driver.get(url)
         time.sleep(2)
+
+        # Restante do seu script
+        # ...
+
         # Preenche o campo 'selIndice'
         select_element = driver.find_element("xpath", '//select[@name="selIndice"]')
         select = Select(select_element)
