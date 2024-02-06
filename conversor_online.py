@@ -4,6 +4,7 @@ from PIL import Image
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
+from webdriver_manager.firefox import GeckoDriverManager
 import time
 
 st.markdown("<h1 style='text-align: center; color: #00497e;'>Índice de Preços - Banco Central:</h1>", unsafe_allow_html=True)
@@ -36,23 +37,20 @@ final = st.text_input("Digite o Mês e Ano finais (MMAAA): ")
 
 # Botão para acionar o script Selenium
 if st.button("Obter Taxa"):
-    # Configuração do Chrome para modo headless
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('--headless')
-    chrome_options.add_argument('--disable-gpu')
-    chrome_options.add_argument('--no-sandbox')
-
-    # Caminho do executável do ChromeDriver
-    chrome_driver_path = "./bin/chromedriver.exe"  # ou o caminho correto se a estrutura de diretórios for diferente
-
+    # Configuração do Firefox para modo headless
+    firefox_options = webdriver.FirefoxOptions()
+    firefox_options.add_argument('--headless')
+    firefox_options.add_argument('--disable-gpu')
+    
+    # Configuração do GeckoDriver usando o GeckoDriverManager
+    geckodriver_path = GeckoDriverManager().install()
+    
     # Script Selenium
-    driver = webdriver.Chrome(options=chrome_options)
-    with driver:
+    with webdriver.Firefox(options=firefox_options) as driver:
         url = 'https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores'
 
         driver.get(url)
         time.sleep(2)
-
         # Preenche o campo 'selIndice'
         select_element = driver.find_element("xpath", '//select[@name="selIndice"]')
         select = Select(select_element)
