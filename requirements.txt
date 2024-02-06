@@ -1,1 +1,3 @@
+streamlit==0.89.0
+webdriver_manager==3.4.2
 selenium==3.141.0
