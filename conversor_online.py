@@ -1,13 +1,15 @@
 import streamlit as st
-import pandas as pd
 from PIL import Image
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from webdriver_manager.chrome import ChromeDriverManager
+import pandas as pd
 
-from selenium.webdriver.chrome.service import Service
 import time
+
+driver = None
 
 st.markdown("<h1 style='text-align: center; color: #00497e;'>Índice de Preços - Banco Central:</h1>", unsafe_allow_html=True)
 imagem1 = Image.open("Imgs//bacen.jpg")
@@ -40,7 +42,7 @@ final = st.text_input("Digite o Mês e Ano finais (MMAAA): ")
 # Botão para acionar o script Selenium
 if st.button("Obter Taxa"):
     # Configuração do Chrome para modo headless
-    chrome_options = webdriver.ChromeOptions()
+    chrome_options = Options()
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument("--headless")
@@ -54,41 +56,43 @@ if st.button("Obter Taxa"):
     # Configuração do WebDriver usando o ChromeDriverManager
     chrome_driver_path = ChromeDriverManager().install()
     
-    # Script Selenium
-    chrome_service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
-    
 
     try:
-        url = 'https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores'
+        with st.spinner("Carregando..."):
+            driver = webdriver.Chrome(options=chrome_options)
+            url = 'https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores'
 
-        driver.get(url)
-        time.sleep(2)
+
+            driver.get(url)
+            time.sleep(2)
 
         # Preenche o campo 'selIndice'
-        select_element = driver.find_element("xpath", '//select[@name="selIndice"]')
-        select = Select(select_element)
-        select.select_by_value(indices[escolha_indice])
+            select_element = driver.find_element("xpath", '//select[@name="selIndice"]')
+            select = Select(select_element)
+            select.select_by_value(indices[escolha_indice])
 
-        # Preenche os campos 'dataInicial', 'dataFinal' e 'valorCorrecao'
-        driver.find_element("name", 'dataInicial').send_keys(f'{inicial}')
-        driver.find_element("name", 'dataFinal').send_keys(f'{final}')
+                # Preenche os campos 'dataInicial', 'dataFinal' e 'valorCorrecao'
+            driver.find_element("name", 'dataInicial').send_keys(f'{inicial}')
+            driver.find_element("name", 'dataFinal').send_keys(f'{final}')
 
-        # Clica no botão 'Corrigir valor'
-        driver.find_element("class name", 'botao').click()
+                # Clica no botão 'Corrigir valor'
+            driver.find_element("class name", 'botao').click()
 
-        # Aguarda um tempo para garantir que a ação seja concluída
-        xpath_dinamico = "/html/body/div[6]/table/tbody/tr/td/div[2]/table[1]/tbody/tr[6]/td[2]"
+                # Aguarda um tempo para garantir que a ação seja concluída
+            xpath_dinamico = "/html/body/div[6]/table/tbody/tr/td/div[2]/table[1]/tbody/tr[6]/td[2]"
 
-        # Encontrar o elemento usando o XPath
-        elemento = driver.find_element(by=By.XPATH, value=xpath_dinamico)
+                # Encontrar o elemento usando o XPath
+            elemento = driver.find_element(by=By.XPATH, value=xpath_dinamico)
 
-        # Imprimir o texto do elemento
-        texto_do_elemento = elemento.text
-        st.success(f"Resultado: {texto_do_elemento}")
+                # Imprimir o texto do elemento
+            texto_do_elemento = elemento.text
+            st.success(f"Resultado: {texto_do_elemento}")
+    except Exception as e:
+        st.error(f"Erro ao executar script Selenium: {str(e)}")
     finally:
+        if driver:
         # Certifique-se de fechar o navegador ao finalizar
-        driver.quit()
+            driver.quit()
         
 
 # Parte do Pandas para processar o CSV
