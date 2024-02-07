@@ -1,19 +1,14 @@
+
 import streamlit as st
+import pandas as pd
 from PIL import Image
 # from selenium import webdriver
-# from selenium.webdriver.chrome.options import Options
 # from selenium.webdriver.common.by import By
 # from selenium.webdriver.support.ui import Select
 # from webdriver_manager.chrome import ChromeDriverManager
 
-# chrome_version ='121.0.6167.160'
-# chrome_driver_path = ChromeDriverManager().install()
-
-import pandas as pd
-
-import time
-
-
+# from selenium.webdriver.chrome.service import Service
+# import time
 
 st.markdown("<h1 style='text-align: center; color: #00497e;'>Índice de Preços - Banco Central:</h1>", unsafe_allow_html=True)
 imagem1 = Image.open("Imgs//bacen.jpg")
@@ -46,58 +41,55 @@ st.markdown("<h1 style='text-align: center; color: #3C8C26;'></h1>", unsafe_allo
 # # Botão para acionar o script Selenium
 # if st.button("Obter Taxa"):
 #     # Configuração do Chrome para modo headless
-#     chrome_options = Options()
+#     chrome_options = webdriver.ChromeOptions()
 #     chrome_options.add_argument('--headless')
 #     chrome_options.add_argument('--disable-gpu')
 #     chrome_options.add_argument("--headless")
 #     chrome_options.add_argument("--no-sandbox")
 #     chrome_options.add_argument("--disable-dev-shm-usage")
-#     #chrome_options.add_argument("--disable-gpu")
+#     chrome_options.add_argument("--disable-gpu")
 #     chrome_options.add_argument("--disable-features=NetworkService")
-#     #chrome_options.add_argument("--window-size=1920x1080")
+#     chrome_options.add_argument("--window-size=1920x1080")
 #     chrome_options.add_argument("--disable-features=VizDisplayCompositor")
     
 #     # Configuração do WebDriver usando o ChromeDriverManager
-#     chrome_driver_path = ChromeDriverManager(chrome_type='googlechrome', version=chrome_version).install()
-#     driver = webdriver.Chrome(executable_path=chrome_driver_path)
+#     chrome_driver_path = ChromeDriverManager().install()
+    
+#     # Script Selenium
+#     chrome_service = Service(ChromeDriverManager().install())
+#     driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
     
 
 #     try:
-#         with st.spinner("Carregando..."):
-            
-#             url = 'https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores'
+#         url = 'https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores'
 
-
-#             driver.get(url) #
-#             #time.sleep(2)
+#         driver.get(url)
+#         time.sleep(2)
 
 #         # Preenche o campo 'selIndice'
-#             select_element = driver.find_element("xpath", '//select[@name="selIndice"]')
-#             select = Select(select_element)
-#             select.select_by_value(indices[escolha_indice])
+#         select_element = driver.find_element("xpath", '//select[@name="selIndice"]')
+#         select = Select(select_element)
+#         select.select_by_value(indices[escolha_indice])
 
-#                 # Preenche os campos 'dataInicial', 'dataFinal' e 'valorCorrecao'
-#             driver.find_element("name", 'dataInicial').send_keys(f'{inicial}')
-#             driver.find_element("name", 'dataFinal').send_keys(f'{final}')
+#         # Preenche os campos 'dataInicial', 'dataFinal' e 'valorCorrecao'
+#         driver.find_element("name", 'dataInicial').send_keys(f'{inicial}')
+#         driver.find_element("name", 'dataFinal').send_keys(f'{final}')
 
-#                 # Clica no botão 'Corrigir valor'
-#             driver.find_element("class name", 'botao').click()
+#         # Clica no botão 'Corrigir valor'
+#         driver.find_element("class name", 'botao').click()
 
-#                 # Aguarda um tempo para garantir que a ação seja concluída
-#             xpath_dinamico = "/html/body/div[6]/table/tbody/tr/td/div[2]/table[1]/tbody/tr[6]/td[2]"
+#         # Aguarda um tempo para garantir que a ação seja concluída
+#         xpath_dinamico = "/html/body/div[6]/table/tbody/tr/td/div[2]/table[1]/tbody/tr[6]/td[2]"
 
-#                 # Encontrar o elemento usando o XPath
-#             elemento = driver.find_element(by=By.XPATH, value=xpath_dinamico)
+#         # Encontrar o elemento usando o XPath
+#         elemento = driver.find_element(by=By.XPATH, value=xpath_dinamico)
 
-#                 # Imprimir o texto do elemento
-#             texto_do_elemento = elemento.text
-#             st.success(f"Resultado: {texto_do_elemento}")
-#     except Exception as e:
-#         st.error(f"Erro ao executar script Selenium: {str(e)}")
+#         # Imprimir o texto do elemento
+#         texto_do_elemento = elemento.text
+#         st.success(f"Resultado: {texto_do_elemento}")
 #     finally:
-#         if driver:
 #         # Certifique-se de fechar o navegador ao finalizar
-#             driver.quit()
+#         driver.quit()
         
 
 # Parte do Pandas para processar o CSV
@@ -121,15 +113,13 @@ if st.button("Processar CSV"):
                 df[nome_coluna] = df[nome_coluna].apply(lambda x: f'R${x:,.2f}')
                 df.to_csv(novo_arquivo_csv, index=False, decimal=',', sep=";")
                 st.success(f"Arquivo {novo_arquivo_csv}.csv gerado com sucesso!")
-
-                # Botão para baixar arquivo
-                down1 = st.button("Baixar arquivo")
-                if down1:
-                    file_path = novo_arquivo_csv
-                    with open(file_path, "rb") as file:
-                        file_content = file.read()
-                        st.download_button(label="Baixar arquivo", data=file_content, file_name=f'{novo_arquivo_csv}.csv', key=None, help=None)
+                file_path = novo_arquivo_csv
+                with open(file_path, "rb") as file:
+                    file_content = file.read()
+                    st.download_button(label="Baixar arquivo", data=file_content, file_name=f'{novo_arquivo_csv}.csv', key=None, help=None)
         except Exception as e:
             st.error(f"Erro ao processar CSV: {str(e)}")
     else:
         st.warning("Carregue o arquivo CSV, digite o nome da coluna e o nome para o novo arquivo antes de processar.")
+
+                    
