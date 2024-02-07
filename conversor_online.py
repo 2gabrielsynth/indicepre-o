@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from webdriver_manager.chrome import ChromeDriverManager
 
+chrome_version ='121.0.6167.160'
 
 import pandas as pd
 
@@ -56,12 +57,12 @@ if st.button("Obter Taxa"):
     chrome_options.add_argument("--disable-features=VizDisplayCompositor")
     
     # Configuração do WebDriver usando o ChromeDriverManager
-    chrome_driver_path = ChromeDriverManager().install()
+    chromeDriverManager(version=chrome_version).install()
     
 
     try:
         with st.spinner("Carregando..."):
-            driver = webdriver.Chrome(options=chrome_options)
+            driver = webdriver.Chrome(executable_path=chrome_driver_path)
             url = 'https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores'
 
 
