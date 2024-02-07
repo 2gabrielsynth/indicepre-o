@@ -12,7 +12,7 @@ import pandas as pd
 
 import time
 
-driver = None
+
 
 st.markdown("<h1 style='text-align: center; color: #00497e;'>Índice de Preços - Banco Central:</h1>", unsafe_allow_html=True)
 imagem1 = Image.open("Imgs//bacen.jpg")
