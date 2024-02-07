@@ -64,7 +64,7 @@ if st.button("Obter Taxa"):
 
     try:
         with st.spinner("Carregando..."):
-            driver = webdriver.Chrome(executable_path=chrome_driver_path)
+            
             url = 'https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores'
 
 
