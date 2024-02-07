@@ -7,6 +7,7 @@ from selenium.webdriver.support.ui import Select
 from webdriver_manager.chrome import ChromeDriverManager
 
 chrome_version ='121.0.6167.160'
+chrome_driver_path = ChromeDriverManager().install()
 
 import pandas as pd
 
@@ -57,7 +58,8 @@ if st.button("Obter Taxa"):
     chrome_options.add_argument("--disable-features=VizDisplayCompositor")
     
     # Configuração do WebDriver usando o ChromeDriverManager
-    chrome_driver_path = ChromeDriverManager(version=chrome_version).install()
+    chrome_driver_path = ChromeDriverManager(chrome_type='googlechrome', version=chrome_version).install()
+    driver = webdriver.Chrome(executable_path=chrome_driver_path)
     
 
     try:
