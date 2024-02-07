@@ -1,13 +1,13 @@
 import streamlit as st
 from PIL import Image
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
-from webdriver_manager.chrome import ChromeDriverManager
+# from selenium import webdriver
+# from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.support.ui import Select
+# from webdriver_manager.chrome import ChromeDriverManager
 
-chrome_version ='121.0.6167.160'
-chrome_driver_path = ChromeDriverManager().install()
+# chrome_version ='121.0.6167.160'
+# chrome_driver_path = ChromeDriverManager().install()
 
 import pandas as pd
 
@@ -24,80 +24,80 @@ st.image(imagem1_redimensionada, caption='', use_column_width=True)
 
 st.markdown("<h1 style='text-align: center; color: #3C8C26;'></h1>", unsafe_allow_html=True)
 
-indices = {
-    'IGP-M (FGV)': '28655IGP-M',
-    'IGP-DI (FGV)': '00190IGP-DI',
-    'INPC (IBGE)': '00188INPC',
-    'IPCA (IBGE)': '00433IPCA',
-    'IPCA-E (IBGE)': '10764IPC-E',
-    'IPC-BRASIL (FGV)': '00191IPC-BRASIL',
-    'IPC-SP (FIPE)': '00193IPC-SP'
-}
+# indices = {
+#     'IGP-M (FGV)': '28655IGP-M',
+#     'IGP-DI (FGV)': '00190IGP-DI',
+#     'INPC (IBGE)': '00188INPC',
+#     'IPCA (IBGE)': '00433IPCA',
+#     'IPCA-E (IBGE)': '10764IPC-E',
+#     'IPC-BRASIL (FGV)': '00191IPC-BRASIL',
+#     'IPC-SP (FIPE)': '00193IPC-SP'
+# }
 
-# Escolha do índice pelo usuário
-escolha_indice = st.radio("Escolha o índice:", list(indices.keys()))
+# # Escolha do índice pelo usuário
+# escolha_indice = st.radio("Escolha o índice:", list(indices.keys()))
 
-# Entrada do usuário para Mês e Ano iniciais
-inicial = st.text_input("Digite o Mês e Ano iniciais (MMAAA): ")
+# # Entrada do usuário para Mês e Ano iniciais
+# inicial = st.text_input("Digite o Mês e Ano iniciais (MMAAA): ")
 
-# Entrada do usuário para Mês e Ano finais
-final = st.text_input("Digite o Mês e Ano finais (MMAAA): ")
+# # Entrada do usuário para Mês e Ano finais
+# final = st.text_input("Digite o Mês e Ano finais (MMAAA): ")
 
-# Botão para acionar o script Selenium
-if st.button("Obter Taxa"):
-    # Configuração do Chrome para modo headless
-    chrome_options = Options()
-    chrome_options.add_argument('--headless')
-    chrome_options.add_argument('--disable-gpu')
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    #chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--disable-features=NetworkService")
-    #chrome_options.add_argument("--window-size=1920x1080")
-    chrome_options.add_argument("--disable-features=VizDisplayCompositor")
+# # Botão para acionar o script Selenium
+# if st.button("Obter Taxa"):
+#     # Configuração do Chrome para modo headless
+#     chrome_options = Options()
+#     chrome_options.add_argument('--headless')
+#     chrome_options.add_argument('--disable-gpu')
+#     chrome_options.add_argument("--headless")
+#     chrome_options.add_argument("--no-sandbox")
+#     chrome_options.add_argument("--disable-dev-shm-usage")
+#     #chrome_options.add_argument("--disable-gpu")
+#     chrome_options.add_argument("--disable-features=NetworkService")
+#     #chrome_options.add_argument("--window-size=1920x1080")
+#     chrome_options.add_argument("--disable-features=VizDisplayCompositor")
     
-    # Configuração do WebDriver usando o ChromeDriverManager
-    chrome_driver_path = ChromeDriverManager(chrome_type='googlechrome', version=chrome_version).install()
-    driver = webdriver.Chrome(executable_path=chrome_driver_path)
+#     # Configuração do WebDriver usando o ChromeDriverManager
+#     chrome_driver_path = ChromeDriverManager(chrome_type='googlechrome', version=chrome_version).install()
+#     driver = webdriver.Chrome(executable_path=chrome_driver_path)
     
 
-    try:
-        with st.spinner("Carregando..."):
+#     try:
+#         with st.spinner("Carregando..."):
             
-            url = 'https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores'
+#             url = 'https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores'
 
 
-            driver.get(url) #
-            #time.sleep(2)
+#             driver.get(url) #
+#             #time.sleep(2)
 
-        # Preenche o campo 'selIndice'
-            select_element = driver.find_element("xpath", '//select[@name="selIndice"]')
-            select = Select(select_element)
-            select.select_by_value(indices[escolha_indice])
+#         # Preenche o campo 'selIndice'
+#             select_element = driver.find_element("xpath", '//select[@name="selIndice"]')
+#             select = Select(select_element)
+#             select.select_by_value(indices[escolha_indice])
 
-                # Preenche os campos 'dataInicial', 'dataFinal' e 'valorCorrecao'
-            driver.find_element("name", 'dataInicial').send_keys(f'{inicial}')
-            driver.find_element("name", 'dataFinal').send_keys(f'{final}')
+#                 # Preenche os campos 'dataInicial', 'dataFinal' e 'valorCorrecao'
+#             driver.find_element("name", 'dataInicial').send_keys(f'{inicial}')
+#             driver.find_element("name", 'dataFinal').send_keys(f'{final}')
 
-                # Clica no botão 'Corrigir valor'
-            driver.find_element("class name", 'botao').click()
+#                 # Clica no botão 'Corrigir valor'
+#             driver.find_element("class name", 'botao').click()
 
-                # Aguarda um tempo para garantir que a ação seja concluída
-            xpath_dinamico = "/html/body/div[6]/table/tbody/tr/td/div[2]/table[1]/tbody/tr[6]/td[2]"
+#                 # Aguarda um tempo para garantir que a ação seja concluída
+#             xpath_dinamico = "/html/body/div[6]/table/tbody/tr/td/div[2]/table[1]/tbody/tr[6]/td[2]"
 
-                # Encontrar o elemento usando o XPath
-            elemento = driver.find_element(by=By.XPATH, value=xpath_dinamico)
+#                 # Encontrar o elemento usando o XPath
+#             elemento = driver.find_element(by=By.XPATH, value=xpath_dinamico)
 
-                # Imprimir o texto do elemento
-            texto_do_elemento = elemento.text
-            st.success(f"Resultado: {texto_do_elemento}")
-    except Exception as e:
-        st.error(f"Erro ao executar script Selenium: {str(e)}")
-    finally:
-        if driver:
-        # Certifique-se de fechar o navegador ao finalizar
-            driver.quit()
+#                 # Imprimir o texto do elemento
+#             texto_do_elemento = elemento.text
+#             st.success(f"Resultado: {texto_do_elemento}")
+#     except Exception as e:
+#         st.error(f"Erro ao executar script Selenium: {str(e)}")
+#     finally:
+#         if driver:
+#         # Certifique-se de fechar o navegador ao finalizar
+#             driver.quit()
         
 
 # Parte do Pandas para processar o CSV
