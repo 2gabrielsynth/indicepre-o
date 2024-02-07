@@ -5,6 +5,8 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from webdriver_manager.chrome import ChromeDriverManager
+
+
 import pandas as pd
 
 import time
@@ -48,9 +50,9 @@ if st.button("Obter Taxa"):
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--disable-gpu")
+    #chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--disable-features=NetworkService")
-    chrome_options.add_argument("--window-size=1920x1080")
+    #chrome_options.add_argument("--window-size=1920x1080")
     chrome_options.add_argument("--disable-features=VizDisplayCompositor")
     
     # Configuração do WebDriver usando o ChromeDriverManager
@@ -63,8 +65,8 @@ if st.button("Obter Taxa"):
             url = 'https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores'
 
 
-            driver.get(url)
-            time.sleep(2)
+            driver.get(url) #
+            #time.sleep(2)
 
         # Preenche o campo 'selIndice'
             select_element = driver.find_element("xpath", '//select[@name="selIndice"]')
