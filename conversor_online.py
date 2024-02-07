@@ -57,7 +57,7 @@ if st.button("Obter Taxa"):
     chrome_options.add_argument("--disable-features=VizDisplayCompositor")
     
     # Configuração do WebDriver usando o ChromeDriverManager
-    chromeDriverManager(version=chrome_version).install()
+    crhome_driver_path = ChromeDriverManager(version=chrome_version).install()
     
 
     try:
